@@ -1,11 +1,10 @@
 ﻿using DjangoClientLib.JsonConverters;
-using DjangoClientLib.Models;
 using DjangoClientLib.Models.Contracts;
 using System.Text.Json.Serialization;
 
 namespace DataAccessLayer.Clients.DjangoClientDomain.Models
 {
-    public class Vehicle : BaseModel, IUrl
+    public class Vehicle : IUrl
     {
         [JsonPropertyName("name")]
         public string? Name { get; set; }

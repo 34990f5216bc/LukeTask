@@ -3,6 +3,7 @@ using DataAccessLayer.Clients.DjangoClientEntities;
 using DjangoClientLib.Models.Contracts;
 using Moq;
 using RichardSzalay.MockHttp;
+using static CommonDataSets.DjongoClientDataSet;
 
 namespace DjangoClientLib.UnitTests
 {
@@ -26,7 +27,8 @@ namespace DjangoClientLib.UnitTests
             var response = await _Client.GetPersonAsync(_DjongoClientDataSet.Person1.Id);
 
             Assert.That(
-                response.ToJson(), Is.EqualTo(_DjongoClientDataSet.Person1.Model.ToJson()));
+                StandardJsonSerializer(response),
+                Is.EqualTo(_DjongoClientDataSet.Person1.ModelAsJson()));
         }
 
         [Test]
@@ -35,25 +37,28 @@ namespace DjangoClientLib.UnitTests
             var response = await _Client.GetFilmsAsync(_DjongoClientDataSet.Film1.Model.Url);
 
             Assert.That(
-                response.ToJson(), Is.EqualTo(_DjongoClientDataSet.Film1.Model.ToJson()));
+                StandardJsonSerializer(response), 
+                Is.EqualTo(_DjongoClientDataSet.Film1.ModelAsJson()));
         }
 
         [Test]
         public async Task GetVehiclesAsync()
         {
-            var response = await _Client.GetFilmsAsync(_DjongoClientDataSet.Vehicle1.Model.Url);
+            var response = await _Client.GetVehiclesAsync(_DjongoClientDataSet.Vehicle1.Model.Url);
 
             Assert.That(
-                response.ToJson(), Is.EqualTo(_DjongoClientDataSet.Vehicle1.Model.ToJson()));
+                StandardJsonSerializer(response),
+                Is.EqualTo(_DjongoClientDataSet.Vehicle1.ModelAsJson()));
         }
 
         [Test]
         public async Task GetStarshipsAsync()
         {
-            var response = await _Client.GetFilmsAsync(_DjongoClientDataSet.Starship1.Model.Url);
+            var response = await _Client.GetStarshipsAsync(_DjongoClientDataSet.Starship1.Model.Url);
 
             Assert.That(
-                response.ToJson(), Is.EqualTo(_DjongoClientDataSet.Starship1.Model.ToJson()));
+                StandardJsonSerializer(response),
+                Is.EqualTo(_DjongoClientDataSet.Starship1.ModelAsJson()));
         }
 
         #region Helpers
@@ -75,14 +80,14 @@ namespace DjangoClientLib.UnitTests
 
             _Client = new DjangoClient(
                 factoryMock.Object,
-                new DjangoClientConfig(DjongoClientDataSet.GetPersonRootUri()));
+                new DjangoClientConfig(GetPersonRootUri()));
         }
 
-        private void RequestResponseMockSetter<T>(MockHttpMessageHandler mockHttp, DjongoClientDataSet.ModelRecord<T> model)
-            where T : IUrl, IToJson
+        private void RequestResponseMockSetter<T>(MockHttpMessageHandler mockHttp, ModelRecord<T> model)
+            where T : IUrl
         {
             mockHttp.When(HttpMethod.Get, model.Model.Url.ToString())
-                .Respond("application/json", model.Model.ToJson());
+                .Respond("application/json", model.ModelAsJson());
         }
         #endregion Helpers
     }

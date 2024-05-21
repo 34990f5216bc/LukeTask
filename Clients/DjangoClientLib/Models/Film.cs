@@ -1,10 +1,9 @@
-﻿using DjangoClientLib.Models;
-using DjangoClientLib.Models.Contracts;
+﻿using DjangoClientLib.Models.Contracts;
 using System.Text.Json.Serialization;
 
 namespace DataAccessLayer.Clients.DjangoClientDomain.Models
 {
-    public partial class Film : BaseModel, IUrl
+    public partial class Film : IUrl
     {
         [JsonPropertyName("title")]
         public string? Title { get; set; }

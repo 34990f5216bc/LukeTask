@@ -1,5 +1,6 @@
 ﻿using DataAccessLayer.Clients.DjangoClientDomain.Models;
 using DjangoClientLib.Models.Contracts;
+using System.Text.Json;
 
 namespace CommonDataSets
 {
@@ -31,12 +32,21 @@ namespace CommonDataSets
             public const string Vehicle = "vehicles";
         }
 
+        public static string StandardJsonSerializer<T>(T obj)
+        {
+            return JsonSerializer.Serialize(obj);
+        }
+
         public class ModelRecord<T>
-            where T : IUrl
         {
             public string Type { get; set; }
             public int Id { get; set; }
             public T Model { get; set; }
+
+            public string ModelAsJson()
+            {
+                return StandardJsonSerializer(Model);
+            }
 
             public Uri GetUrl()
             {
