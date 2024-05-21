@@ -45,14 +45,14 @@ namespace DataAccessLayer.UnitTests
             public bool Equals(PersonProfile x, PersonProfile y)
             {
                 return x.FullName == y.FullName
-                    && FastEquivalent(x.Vehicles, x.Vehicles)
-                    && FastEquivalent(x.Starships, x.Starships)
-                    && FastEquivalent(x.Films, x.Films);
+                    && FastEquivalent(x.Vehicles, y.Vehicles)
+                    && FastEquivalent(x.Starships, y.Starships)
+                    && FastEquivalent(x.Films, y.Films);
             }
 
             public int GetHashCode([DisallowNull] PersonProfile obj)
             {
-                return obj.GetHashCode();
+                return this.GetHashCode() + obj.GetHashCode();
             }
 
             private bool FastEquivalent<T>(T[] collection1, T[] collection2)
